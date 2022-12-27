@@ -1,0 +1,15 @@
+.outer-icons {
+    position: absolute;
+    right: 10px;
+    background: #fff;
+  }
+  .mains {
+    position: relative;
+  }
+  .side-icons {
+    padding: 3px 9px;
+    border-bottom: 1px solid #eee;
+}
+.view{
+    display:'none'
+}
