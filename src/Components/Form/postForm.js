@@ -18,7 +18,6 @@ import { HiOutlineDuplicate } from "react-icons/hi";
 const PostForm = () => {
   //onMouse Hover State
   const [enter, setEnter] = useState("view");
-  console.log(enter)
   const handleMouse = () => {
     setEnter("mains");
   };
@@ -28,27 +27,28 @@ const PostForm = () => {
   //judit editor code
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  console.log(content);
   const config = {
     placeholder: "Start typings...",
   };
   //duplicate functionality
-  const [duplicate, setDuplicate] = useState();
-  const handleDuplicate = () =>{
-    setDuplicate(<div>
-           <MDBInput label=" section title" className="mb-2 py-2" />
-                  <JoditEditor
-                    ref={editor}
-                    value={content}
-                    config={config}
-                    onBlur={(newContent) => setContent(newContent)} 
-                  />
-    </div>)
-  }
+  const [add, setAdd] = useState([
+    {
+      id: 1,
+    },
+  ]);
+  const [increment, setIncrement] = useState();
+  const handleDuplicate = () => {
+    setAdd([...add, { id: increment }]);
+    setIncrement(increment + 1);
+  };
   //Delete functionality
-  const handleDelete = () =>{
-    setDuplicate('')
+  const handleDelete = (index) => {
+    let newData =  add.filter((item)=>{
+    return (item.id !== index)
+    })
+    setAdd(newData)
   }
+
   return (
     <div className="post-form">
       <MDBContainer className="mt-2">
@@ -56,41 +56,44 @@ const PostForm = () => {
           <MDBCol size="md-8">
             <MDBCard className="p-4">
               <MDBCardHeader className="display-6 text-center p-2">
-                USER POST FROM
+                USER POST FORM
               </MDBCardHeader>
               <MDBCardBody>
                 <MDBInput label="post title" />
                 <br />
                 <MDBInput label="post slug" />
                 <br />
-                <div
-                  className="judit-editor shadow-lg p-2"
-                //   onMouseEnter={handleMouse}
-                //   onMouseLeave={handleLeave}
-                >
-                  <div className={`${enter}`}>
-                    <div className="outer-icons">
-                      <div className="side-icons">
-                        <FiSettings />
+                {add.map((item,index) => {
+                  return (
+                    <div
+                      className="judit-editor shadow-lg p-2"
+                      //   onMouseEnter={handleMouse}
+                      //   onMouseLeave={handleLeave}
+                      key={index} >
+                      <div className={`${enter}`}>
+                        <div className="outer-icons">
+                          <div className="side-icons">
+                            <FiSettings />
+                          </div>
+                          <div className="side-icons" onClick={handleDuplicate}>
+                            <HiOutlineDuplicate />
+                          </div>
+                          <div className="side-icons" onClick={()=>handleDelete(item.id)}>
+                            <MdDelete />
+                          </div>
+                        </div>
                       </div>
-                      <div className="side-icons" onClick={handleDuplicate}>
-                        <HiOutlineDuplicate />
-                      </div>
-                      <div className="side-icons" onClick={handleDelete}>
-                        <MdDelete />
-                      </div>
+                      <MDBInput label=" section title" className="mb-2 py-2" />
+                      <JoditEditor
+                        ref={editor}
+                        value={content}
+                        config={config}
+                        onBlur={(newContent) => setContent(newContent)}
+                      />
                     </div>
-                  </div>
-                  <MDBInput label=" section title" className="mb-2 py-2" />
-                  <JoditEditor
-                    ref={editor}
-                    value={content}
-                    config={config}
-                    onBlur={(newContent) => setContent(newContent)} 
-                  />
-                  {duplicate}
-                  
-                </div>
+                  );
+                })}
+
                 <br />
                 <MDBBtn onClick={() => {}}>Submit</MDBBtn>
               </MDBCardBody>
