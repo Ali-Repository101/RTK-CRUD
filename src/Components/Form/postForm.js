@@ -14,6 +14,8 @@ import {
 import { FiSettings } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { HiOutlineDuplicate } from "react-icons/hi";
+import CsJoditEditor from "./CsJoditEditor";
+import { useEffect } from "react";
 
 const PostForm = () => {
   //onMouse Hover State
@@ -33,21 +35,37 @@ const PostForm = () => {
   //duplicate functionality
   const [add, setAdd] = useState([
     {
-      id: 1,
+      id: 0,
+      content: '',
     },
   ]);
-  const [increment, setIncrement] = useState();
+  const [increment, setIncrement] = useState(1);
   const handleDuplicate = () => {
-    setAdd([...add, { id: increment }]);
+    setAdd([...add, { id: increment, content:'' }]);
     setIncrement(increment + 1);
   };
+  const updatecontent = (content, updateIndex) => {
+    console.log(content, updateIndex)
+    add.map((item, index) => {
+      console.log(item, index)
+      if(item.id == updateIndex){
+        item.content = content;
+      }
+    })
+
+  };
+  useEffect(() => {
+    console.log("array--", add)
+  
+  }, [add, updatecontent])
+  
   //Delete functionality
   const handleDelete = (index) => {
-    let newData =  add.filter((item)=>{
-    return (item.id !== index)
-    })
-    setAdd(newData)
-  }
+    let newData = add.filter((item) => {
+      return item.id !== index;
+    });
+    setAdd(newData);
+  };
 
   return (
     <div className="post-form">
@@ -63,13 +81,14 @@ const PostForm = () => {
                 <br />
                 <MDBInput label="post slug" />
                 <br />
-                {add.map((item,index) => {
+                {add.map((item, index) => {
                   return (
                     <div
                       className="judit-editor shadow-lg p-2"
                       //   onMouseEnter={handleMouse}
                       //   onMouseLeave={handleLeave}
-                      key={index} >
+                      key={index}
+                    >
                       <div className={`${enter}`}>
                         <div className="outer-icons">
                           <div className="side-icons">
@@ -78,17 +97,18 @@ const PostForm = () => {
                           <div className="side-icons" onClick={handleDuplicate}>
                             <HiOutlineDuplicate />
                           </div>
-                          <div className="side-icons" onClick={()=>handleDelete(item.id)}>
+                          <div
+                            className="side-icons"
+                            onClick={() => handleDelete(item.id)}
+                          >
                             <MdDelete />
                           </div>
                         </div>
                       </div>
                       <MDBInput label=" section title" className="mb-2 py-2" />
-                      <JoditEditor
-                        ref={editor}
-                        value={content}
-                        config={config}
-                        onBlur={(newContent) => setContent(newContent)}
+                      <CsJoditEditor 
+                          content= {item.content}
+                          onBlur={(e) => updatecontent(e, item.id)}
                       />
                     </div>
                   );
