@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import JoditEditor from "jodit-react";
+import Profile from "./Profile";
+
 import {
   MDBContainer,
   MDBRow,
@@ -77,6 +79,7 @@ const PostForm = () => {
                 USER POST FORM
               </MDBCardHeader>
               <MDBCardBody>
+                <Profile/>
                 <MDBInput label="post title" />
                 <br />
                 <MDBInput label="post slug" />
