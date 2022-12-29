@@ -1,38 +1,63 @@
-import { useEffect, useState } from "react";
-import { useAuth, upload } from "../../../src/firebase/firebase";
-import { MDBBtn, MDBInput } from 'mdb-react-ui-kit';
+import React from 'react';
+import { useState } from "react";
+import { MDBBtn, MDBInput, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { storage } from '../../firebase/firebase';
+import { getDownloadURL, ref, uploadBytes, images } from "firebase/storage";
+import { Avatar } from '@mui/material';
+import {AiOutlinePicture} from "react-icons/ai";
+import {ImArrowRight} from "react-icons/im";
+export default function Profile() {
 
-export default function Profile(){
-const currentUser= useAuth();
-const [loading,setLoading]=useState(false);
-const [photo, setPhoto]=useState(null);
-const [photoURL, setphotoURL]=useState("https://www.shutterstock.com/image-vector/man-icon-vector-260nw-1040084344.jpg");
-
-    function handelChange(e){
- if (e.target.files[0]){
-    setPhoto(e.target.files[0])
- }
+    const [image, setImage] = useState(null);
+    const [url, setUrl] = useState(null);
+    const handelImageChange = (e) => {
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        };
     }
 
-    function handelClick(){
-        upload(photo, currentUser , setLoading);
+    const handelupload = () => {
+        const imageRef = ref(storage, "image");
+        uploadBytes(imageRef, image).then(() => {
+            getDownloadURL(imageRef)
+                .then((url) => {
+                    setUrl(url);
+                }).catch(error => {
+                    console.log(error.message, "error image url ")
+                })
+            setImage(null);
+
+        })
+            .catch(error => {
+                console.log(error.message);
+            })
     }
-
-    useEffect(()=>{
-        if(currentUser ?.photoURL){
-        setphotoURL(currentUser.photoURL);
-        }
-    },[currentUser])
-
-    
-    return(
+    return (
         <>
-        <div className="fields">
-            <MDBInput type="file" onChange={handelChange}/>
-            
-            <img src={photoURL} alt="Avatar" className="avatar mt-5 me-5 " />
-            <MDBBtn disabled={loading || !photo} onClick={handelClick} className="mb-3">Upload</MDBBtn>
-        </div>
+            <div className="fields">
+                <MDBRow>
+                    <MDBCol lg='4'>
+                        <MDBInput type="file" onChange={handelImageChange} className="field" />
+                        </MDBCol>
+                        <MDBCol lg="2">
+                        <MDBBtn onClick={handelupload} className=" mt-2 upload"><ImArrowRight /></MDBBtn>
+                    </MDBCol>
+                    <MDBCol lg="1" >
+                            </MDBCol>
+                            <MDBCol lg="5">
+                            <div className='avatar text-center '>
+                            {
+                                url ? 
+                                <img src={url} className='img-fluid rounded' alt='' />
+      
+                                :
+<AiOutlinePicture style={{fontSize:"30px", marginTop:"4px"}} />
+                            }
+                           
+                        </div>
+                    </MDBCol>
+                </MDBRow>
+            </div>
         </>
     );
 }

@@ -80,7 +80,7 @@ const PostForm = () => {
               </MDBCardHeader>
               <MDBCardBody>
                 <Profile/>
-                <MDBInput label="post title" />
+                <MDBInput label="post title" className="title"/>
                 <br />
                 <MDBInput label="post slug" />
                 <br />

@@ -1,7 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth,  onAuthStateChanged,   updateProfile } from 'firebase/auth'
-import { useEffect, useState } from "react";
-import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import { initializeApp } from "firebase/app"
+import { getStorage } from "firebase/storage";
 const firebaseConfig = {
     apiKey: "AIzaSyADrMh8hjeO1yxqeu0-TW5iDuRZ9T2-dLQ",
     authDomain: "mdbimg-e1a34.firebaseapp.com",
@@ -13,46 +11,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const storage= getStorage();
+export const storage= getStorage(app);
 
-// export function signup(email, password) {
-//     return createUserWithEmailAndPassword(auth, email, password);
-// }
-
-// export function login(email, password) {
-//     return signInWithEmailAndPassword(auth, email, password);
-// }
-
-// export function logout() {
-//     return signOut(auth);
-// }
-
-//custom hook
-
-export function useAuth() {
-    const [currentUser, setCurrentUser] = useState();
-
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
-        return unsub;
-    }, [])
-
-    return currentUser;
-}
-
-
-//storage
-
-export async function upload(file, currentUser, setLoading){
-const fileRef = ref(storage, currentUser.uid + '.png');
-setLoading(true);
-const snapshot = await uploadBytes(fileRef, file);
-
-const photoURL= await getDownloadURL(fileRef);
-
-updateProfile(currentUser, {photoURL});
-
-setLoading(false);
-alert("uploaded file!");
-}
