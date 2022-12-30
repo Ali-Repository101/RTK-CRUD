@@ -37,6 +37,12 @@ input{
   margin: -8px auto !important;
   border-radius: none !important;
 }
+.ban {
+  width: 100% !important;
+  height: 200px !important;
+  margin: -8px auto !important;
+  border-radius: none !important;
+}
 
 @media (max-width:999px)    {
   .upload {
