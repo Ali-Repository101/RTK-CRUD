@@ -11,6 +11,8 @@ import {
   MDBCardHeader,
   MDBInput,
   MDBBtn,
+  MDBValidation, 
+  MDBValidationItem
 } from "mdb-react-ui-kit";
 //Configuaration of React Icons
 import { FiSettings } from "react-icons/fi";
@@ -72,6 +74,8 @@ const PostForm = () => {
   return (
     <div className="post-form">
       <MDBContainer className="mt-2">
+        
+      <MDBValidation className='row g-3' isValidated>
         <MDBRow>
           <MDBCol size="md-8">
             <MDBCard className="p-4">
@@ -80,9 +84,17 @@ const PostForm = () => {
               </MDBCardHeader>
               <MDBCardBody>
                 <Profile/>
-                <MDBInput label="post title" className="title"/>
+                <div className="mt-4">
+                <MDBValidationItem feedback='Fill Your post title.' invalid  >  
+                <MDBInput label="post title" className="title mt-3" id='validationCustomUsername'
+            required />
+                </MDBValidationItem>
+                </div>
                 <br />
-                <MDBInput label="post slug" />
+                <MDBValidationItem feedback='Fill Your post title.' invalid  > 
+                <MDBInput label="post slug" id='validationCustomUsername'
+            required  />
+                </MDBValidationItem>
                 <br />
                 {add.map((item, index) => {
                   return (
@@ -107,8 +119,10 @@ const PostForm = () => {
                             <MdDelete />
                           </div>
                         </div>
-                      </div>
-                      <MDBInput label=" section title" className="mb-2 py-2" />
+                      </div>  
+                <MDBValidationItem feedback='Fill Your post title.' invalid  >                      <MDBInput label=" section title" className="mb-2 py-2" id='validationCustomUsername'
+            required />
+            </MDBValidationItem>
                       <CsJoditEditor 
                           content= {item.content}
                           onBlur={(e) => updatecontent(e, item.id)}
@@ -122,7 +136,10 @@ const PostForm = () => {
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
+          
         </MDBRow>
+        
+      </MDBValidation>
       </MDBContainer>
     </div>
   );
