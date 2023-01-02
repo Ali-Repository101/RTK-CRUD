@@ -1,95 +1,104 @@
-import React from 'react'
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardHeader,
+  MDBCol,
+  MDBRow,
+  MDBCardBody,
+  MDBInput,
+  MDBBtn,
+  MDBTextArea,
+} from "mdb-react-ui-kit";
 import { useState } from "react";
-import { MDBContainer, MDBRow,MDBCol,MDBBtn, MDBInput } from 'mdb-react-ui-kit';
-import { storage } from '../../firebase/firebase';
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { AiOutlinePicture } from "react-icons/ai";
-import { ImArrowRight } from "react-icons/im";
-
-export const Banner = () => {
-    const [image, setImage] = useState(null);
-    const [url, setUrl] = useState(null);
-    //BASE64 CODE START HERE
-    const onLoad = (mainFile) => {
-        //set photoUrl in localStorage
-        localStorage.setItem('photoUrl', mainFile)
-        setUrl(mainFile);
+import BannerOutput from "../BannerOutput";
+const CsBanner = () => {
+  const [url, setUrl] = useState(null);
+  //BASE64 CODE START HERE
+  const onLoad = (mainFile) => {
+    //set photoUrl in localStorage
+    localStorage.setItem("photoUrl", mainFile);
+    setUrl(mainFile);
+  };
+  const getBase64 = (file) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      onLoad(reader.result);
     };
-    const getBase64 = (file) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            onLoad(reader.result);
-        };
-    };
-    //get photoUrl from localStorage
-    const PhotoUrl = localStorage.getItem('photoUrl');
+  };
+  //get photoUrl from localStorage
+  const PhotoUrl = localStorage.getItem("photoUrl");
+  const handelImageChange = (e) => {
+    getBase64(e.target.files[0]);
+  };
 
-    const handelImageChange = (e) => {
-        getBase64(e.target.files[0]);
-        if (e.target.files[0]) {
-            setImage(e.target.files[0]);
-        };
-    }
-    const handelupload = () => {
-        const imageRef = ref(storage, "image");
-        uploadBytes(imageRef, image).then(() => {
-            getDownloadURL(imageRef)
-                .then((url) => {
-                    setUrl(url);
-                }).catch(error => {
-                    console.log(error.message, "error image url ")
-                })
-            setImage(null);
-
-        })
-            .catch(error => {
-                console.log(error.message);
-            })
-    }
+  //Functnality
+  const [icon, setIcon] = useState(null);
+  const [link, setLink] = useState(null);
+  const [desc, setDesc] = useState(null);
+  const [buttonLink, setButtonLink] = useState(null);
+  const [bannerOutput, setBannerOutput] = useState(false);
+  const handleBanner = () => {
+    setBannerOutput(true);
+  };
   return (
-    <MDBContainer>
+    <div className="banner">
+      <MDBContainer className="mt-3">
         <MDBRow>
-                    <MDBCol lg='3'>
-                                <MDBInput type="file" onChange={handelImageChange} className="field" />
+          <MDBCol lg="6 ">
+            <MDBCard>
+              <MDBCardHeader>
+                <h2 className="display-6 text-center">Create Custome Banner</h2>
+              </MDBCardHeader>
+              <MDBCardBody>
+                <MDBInput
+                  type="file"
+                  onChange={handelImageChange}
+                  className="field"
+                />
+                <br />
+                <MDBInput
+                  type="text"
+                  label="enter icon url"
+                  className="field"
+                  onChange={(event) => setIcon(event.target.value)}
+                />
+                <br />
+                <MDBInput
+                  type="text"
+                  className="field"
+                  label="content.."
+                  onChange={(event) => setDesc(event.target.value)}
+                />
+                <br />
+                <MDBInput
+                  type="text"
+                  className="field"
+                  label="enter link url"
+                  onChange={(event) => setLink(event.target.value)}
+                />
+                <br />
+                <MDBInput
+                  type="text"
+                  className="field"
+                  label="enter button link url"
+                  onChange={(event) => setButtonLink(event.target.value)}
+                />
+                <br />
+                <MDBBtn onClick={handleBanner}>SEE BANNER</MDBBtn>
+              </MDBCardBody>
+            </MDBCard>
 
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        <MDBInput label="text"></MDBInput>
-                        </MDBCol>
-                        <MDBCol lg="2">
-                        <MDBBtn className=" mt-2"  ><ImArrowRight /></MDBBtn>
-                    </MDBCol>
-                    <MDBCol lg="2"  className="mt-2" >
-                        <MDBBtn href='#heloo' color='danger'>Learn More</MDBBtn>
-                    </MDBCol>
-                    <MDBCol lg="2" className="mt-2">
-                        <MDBBtn href='#heloo' color='success'>Learn More</MDBBtn>
-                    </MDBCol>
-                    </MDBRow>
-                    {/* <MDBRow>
-                    <MDBCol lg="4">
-                        <MDBBtn onClick={handelupload} className=" mt-2 upload" ><ImArrowRight /></MDBBtn>
+            {/* Banner output */}
+          </MDBCol>
+        </MDBRow>
+        <div className="mt-4">
+          {bannerOutput && <BannerOutput icon={icon} link={link} desc={desc} buttonLink={buttonLink}/>}
+        </div>
+      </MDBContainer>
+    </div>
+  );
+};
 
-                    </MDBCol>
-                    </MDBRow> */}
-                    <MDBRow>
-                    <MDBCol lg="4 mt-4">
-                        <div className='avatar text-center '>
-                            {
-                                url ?
-                                    <img src={PhotoUrl} className='img-fluid rounded ban' alt='' style={{ maxWidth: '100%', minHeight:"100%" }} />
-
-                                    :
-                                    <AiOutlinePicture style={{ fontSize: "30px", marginTop: "4px" }} />
-                            }
-
-                        </div>
-
-                    </MDBCol>
-                </MDBRow>
-                
- 
-    </MDBContainer>
-  )
-}
+export default CsBanner;
