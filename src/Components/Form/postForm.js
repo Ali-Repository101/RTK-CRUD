@@ -91,7 +91,7 @@ const PostForm = () => {
                 </MDBValidationItem>
                 </div>
                 <br />
-                <MDBValidationItem feedback='Fill Your post title.' invalid  > 
+                <MDBValidationItem feedback='Fill Your post Url.' invalid  > 
                 <MDBInput label="post slug" id='validationCustomUsername'
             required  />
                 </MDBValidationItem>
@@ -120,7 +120,7 @@ const PostForm = () => {
                           </div>
                         </div>
                       </div>  
-                <MDBValidationItem feedback='Fill Your post title.' invalid  >                      <MDBInput label=" section title" className="mb-2 py-2" id='validationCustomUsername'
+                <MDBValidationItem feedback='Fill Your section title.' invalid  className="mb-4">                      <MDBInput label=" section title" className="mb-2 py-2" id='validationCustomUsername'
             required />
             </MDBValidationItem>
                       <CsJoditEditor 
