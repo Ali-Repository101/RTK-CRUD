@@ -3,7 +3,6 @@ import { useState } from "react";
 import { MDBBtn, MDBInput, MDBRow, MDBCol, MDBValidation, MDBValidationItem, } from 'mdb-react-ui-kit';
 import { storage } from '../../firebase/firebase';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Avatar } from '@mui/material';
 import { AiOutlinePicture } from "react-icons/ai";
 import { ImArrowRight } from "react-icons/im";
 export default function Profile() {

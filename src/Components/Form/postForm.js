@@ -70,22 +70,67 @@ const PostForm = () => {
     });
     setAdd(newData);
   };
-  //validation
 
-  const [formValue, setFormValue] = useState({
-    posttitle: '',
-    posturl: '',
-    sectiontitle: '',
-  });
+ //form database store in firebase
 
-  const onChange = (e) => {
-    setFormValue({ ...formValue, [e.target.name]: e.target.value });
-  };
+ const [formdata,setFormdata]= useState({
+  postTitle: "",
+  postUrl:"",
 
+  getContent :  {
+    sectionTitle:"",
+    content:"",
+  }
+})
+let name,value
+const postFormdata = (event)=> {
+  name = event.target.name;
+  value = event.target.value;
+
+  setFormdata({...formdata, [name]: value});
+}
+
+//conect with firebase
+const submitData = (event)=>{
+event.preventDefault();
+const{postTitle,postUrl,sectionTitle,getContent} = formdata;
+if(postTitle && postUrl && sectionTitle && getContent){
+  const res = fetch('https://mdbimg-e1a34-default-rtdb.firebaseio.com/formdataRecords.json',
+{
+method : "POST",
+headers: {
+"Content-Type":"application/json",
+},
+body: JSON.stringify({
+  postTitle,
+  postUrl,
+
+  getContent:{
+    sectionTitle,
+    content,
+  },
+}),
+}
+);
+if(res){
+  setFormdata({
+    postTitle: "",
+    postUrl:"",
+    getContent:{
+      sectionTitle:"",
+      content:"",
+    },
+  })
+  alert("data stored");
+}
+}
+else{
+  alert("plz fill the data");
+}
+}
   return (
     <div className="post-form">
       <MDBContainer className="mt-2">
-
       <MDBValidation className='row g-3'>
           <MDBRow>
             <MDBCol size="md-8">
@@ -94,21 +139,24 @@ const PostForm = () => {
                   USER POST FORM
                 </MDBCardHeader>
                 <MDBCardBody>
+                  <form method="post">
                   <Profile />
                   <div className="mt-4">
                   <MDBValidationItem  feedback='Please enter post tilte.' invalid>
-                      <MDBInput label="post title" className="title mt-3" value={formValue.posttitle}
-                        name='posttitle'
-                        onChange={onChange}
+                      <MDBInput label="post title" className="title mt-3" 
+                      name="postTitle"
+                      value={formdata.postTitle}
+                      onChange={postFormdata}
                         id='validationCustom03'
                         required />
                     </MDBValidationItem>
                   </div>
                   <br />
                   <MDBValidationItem feedback='Fill Your post Url.' invalid>
-                    <MDBInput label="post slug" value={formValue.posturl}
-                        name='posturl'
-                        onChange={onChange}
+                    <MDBInput label="post slug" 
+                    name="postUrl"
+                    value={formdata.postUrl}
+                    onChange={postFormdata}
                         id='validationCustom03'
                         required />
                   </MDBValidationItem>
@@ -138,9 +186,9 @@ const PostForm = () => {
                           </div>
                         </div>
                         <MDBValidationItem feedback='Fill Your section title.' invalid className="mb-4">                     
-                         <MDBInput label=" section title" className="mb-2 py-2" value={formValue.sectiontitle}
-                        name='sectiontitle'
-                        onChange={onChange}
+                         <MDBInput label=" section title" className="mb-2 py-2"
+                         name="sectionTitle" 
+                         onChange={postFormdata}
                         id='validationCustom03'
                         required  />
                         </MDBValidationItem>
@@ -153,7 +201,8 @@ const PostForm = () => {
                   })}
 
                   <br />
-                  <MDBBtn type='submit'>Submit</MDBBtn>
+                  <MDBBtn type='submit' onClick={submitData}>Submit</MDBBtn>
+                  </form>
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
