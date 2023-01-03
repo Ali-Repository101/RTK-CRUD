@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from "react"; 
 import JoditEditor from "jodit-react";
 import Profile from "./Profile";
 
@@ -11,7 +11,7 @@ import {
   MDBCardHeader,
   MDBInput,
   MDBBtn,
-  MDBValidation, 
+  MDBValidation,
   MDBValidationItem
 } from "mdb-react-ui-kit";
 //Configuaration of React Icons
@@ -45,14 +45,14 @@ const PostForm = () => {
   ]);
   const [increment, setIncrement] = useState(1);
   const handleDuplicate = () => {
-    setAdd([...add, { id: increment, content:'' }]);
+    setAdd([...add, { id: increment, content: '' }]);
     setIncrement(increment + 1);
   };
   const updatecontent = (content, updateIndex) => {
     console.log(content, updateIndex)
     add.map((item, index) => {
       console.log(item, index)
-      if(item.id == updateIndex){
+      if (item.id == updateIndex) {
         item.content = content;
       }
     })
@@ -60,9 +60,9 @@ const PostForm = () => {
   };
   useEffect(() => {
     console.log("array--", add)
-  
+
   }, [add, updatecontent])
-  
+
   //Delete functionality
   const handleDelete = (index) => {
     let newData = add.filter((item) => {
@@ -70,76 +70,97 @@ const PostForm = () => {
     });
     setAdd(newData);
   };
+  //validation
+
+  const [formValue, setFormValue] = useState({
+    posttitle: '',
+    posturl: '',
+    sectiontitle: '',
+  });
+
+  const onChange = (e) => {
+    setFormValue({ ...formValue, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="post-form">
       <MDBContainer className="mt-2">
-        
-      <MDBValidation className='row g-3' isValidated>
-        <MDBRow>
-          <MDBCol size="md-8">
-            <MDBCard className="p-4">
-              <MDBCardHeader className="display-6 text-center p-2">
-                USER POST FORM
-              </MDBCardHeader>
-              <MDBCardBody>
-                <Profile/>
-                <div className="mt-4">
-                <MDBValidationItem feedback='Fill Your post title.' invalid  >  
-                <MDBInput label="post title" className="title mt-3" id='validationCustomUsername'
-            required />
-                </MDBValidationItem>
-                </div>
-                <br />
-                <MDBValidationItem feedback='Fill Your post Url.' invalid  > 
-                <MDBInput label="post slug" id='validationCustomUsername'
-            required  />
-                </MDBValidationItem>
-                <br />
-                {add.map((item, index) => {
-                  return (
-                    <div
-                      className="judit-editor shadow-lg p-2"
-                      //   onMouseEnter={handleMouse}
-                      //   onMouseLeave={handleLeave}
-                      key={index}
-                    >
-                      <div className={`${enter}`}>
-                        <div className="outer-icons">
-                          <div className="side-icons">
-                            <FiSettings />
-                          </div>
-                          <div className="side-icons" onClick={handleDuplicate}>
-                            <HiOutlineDuplicate />
-                          </div>
-                          <div
-                            className="side-icons"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <MdDelete />
+
+      <MDBValidation className='row g-3'>
+          <MDBRow>
+            <MDBCol size="md-8">
+              <MDBCard className="p-4">
+                <MDBCardHeader className="display-6 text-center p-2">
+                  USER POST FORM
+                </MDBCardHeader>
+                <MDBCardBody>
+                  <Profile />
+                  <div className="mt-4">
+                  <MDBValidationItem  feedback='Please enter post tilte.' invalid>
+                      <MDBInput label="post title" className="title mt-3" value={formValue.posttitle}
+                        name='posttitle'
+                        onChange={onChange}
+                        id='validationCustom03'
+                        required />
+                    </MDBValidationItem>
+                  </div>
+                  <br />
+                  <MDBValidationItem feedback='Fill Your post Url.' invalid>
+                    <MDBInput label="post slug" value={formValue.posturl}
+                        name='posturl'
+                        onChange={onChange}
+                        id='validationCustom03'
+                        required />
+                  </MDBValidationItem>
+                  <br />
+                  {add.map((item, index) => {
+                    return (
+                      <div
+                        className="judit-editor shadow-lg p-2"
+                        //   onMouseEnter={handleMouse}
+                        //   onMouseLeave={handleLeave}
+                        key={index}
+                      >
+                        <div className={`${enter}`}>
+                          <div className="outer-icons">
+                            <div className="side-icons">
+                              <FiSettings />
+                            </div>
+                            <div className="side-icons" onClick={handleDuplicate}>
+                              <HiOutlineDuplicate />
+                            </div>
+                            <div
+                              className="side-icons"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <MdDelete />
+                            </div>
                           </div>
                         </div>
-                      </div>  
-                <MDBValidationItem feedback='Fill Your section title.' invalid  className="mb-4">                      <MDBInput label=" section title" className="mb-2 py-2" id='validationCustomUsername'
-            required />
-            </MDBValidationItem>
-                      <CsJoditEditor 
-                          content= {item.content}
+                        <MDBValidationItem feedback='Fill Your section title.' invalid className="mb-4">                     
+                         <MDBInput label=" section title" className="mb-2 py-2" value={formValue.sectiontitle}
+                        name='sectiontitle'
+                        onChange={onChange}
+                        id='validationCustom03'
+                        required  />
+                        </MDBValidationItem>
+                        <CsJoditEditor
+                          content={item.content}
                           onBlur={(e) => updatecontent(e, item.id)}
-                      />
-                    </div>
-                  );
-                })}
+                        />
+                      </div>
+                    );
+                  })}
 
-                <br />
-                <MDBBtn onClick={() => {}}>Submit</MDBBtn>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-          
-        </MDBRow>
-        
-      </MDBValidation>
+                  <br />
+                  <MDBBtn type='submit'>Submit</MDBBtn>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+
+          </MDBRow>
+
+        </MDBValidation>
       </MDBContainer>
     </div>
   );
