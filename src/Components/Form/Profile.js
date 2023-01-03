@@ -48,15 +48,20 @@ export default function Profile() {
                 console.log(error.message);
             })
     }
+     
+
+  
+
     return (
         <>
             <div className="fields">
                 <MDBRow>
                     <MDBCol lg='5'>
-                        <MDBValidation className=' g-3' isValidated>
+                        <MDBValidation className=' g-3' >
                             <MDBValidationItem feedback='Please choose a File.' invalid >
-                                <MDBInput type="file" onChange={handelImageChange} className="field" id='validationCustomUsername'
-                                    required />
+                                <MDBInput type="file" onChange={handelImageChange} className="field" 
+                        id='validationCustom03'
+                        required/>
 
                             </MDBValidationItem>
 
