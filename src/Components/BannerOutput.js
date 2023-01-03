@@ -8,7 +8,7 @@ const BannerOutput = (props) => {
       <MDBCard>
         <div
           className="main d-flex justify-content-center align-items-center p-2 gap-5"
-          style={{ border: "2px solid black", width: "800px" }}
+          style={{ border: "0.5px solid grey", width: "800px" }}
         >
           <div className=" text-center">
             <img
