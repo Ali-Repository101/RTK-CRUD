@@ -1,14 +1,22 @@
 import "./App.css"
 import CsBanner from "./Components/Form/Banner";
 import PostForm from "./Components/Form/postForm";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavbarSection from "./NavbarSection";
+import UserTable from "./Components/Users-Table/UserTable";
 const App = () => {
-  return <div className="App">
-    <CsBanner/>
-    <div style={{marginTop:"10%"}}>
-  <PostForm/>
-  </div>
-  </div>;
+return(
+  <>
+      <BrowserRouter> 
+  <NavbarSection/>
+    <Routes>
+      <Route path="/" element={<PostForm/>}/>
+      <Route path="csbanner" element={<CsBanner/>}/>
+      <Route path="tableData" element={<UserTable/>}/>
+    </Routes>
+  </BrowserRouter>
+  </>
+)
 };
 
 export default App;

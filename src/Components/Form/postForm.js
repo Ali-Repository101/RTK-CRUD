@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react"; 
-import JoditEditor from "jodit-react";
 import Profile from "./Profile";
 
 import {
@@ -41,11 +40,12 @@ const PostForm = () => {
     {
       id: 0,
       content: '',
+      sectionTitle:''
     },
   ]);
   const [increment, setIncrement] = useState(1);
   const handleDuplicate = () => {
-    setAdd([...add, { id: increment, content: '' }]);
+    setAdd([...add, { id: increment, content: '',  sectionTitle:''}]);
     setIncrement(increment + 1);
   };
   const updatecontent = (content, updateIndex) => {
@@ -130,7 +130,7 @@ else{
 }
   return (
     <div className="post-form">
-      <MDBContainer className="mt-2">
+      <MDBContainer className="mt-5">
       <MDBValidation className='row g-3'>
           <MDBRow>
             <MDBCol size="md-8">
