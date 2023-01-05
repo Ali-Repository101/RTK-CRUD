@@ -17,29 +17,47 @@ const UserTable = () => {
   const imageUrl = localStorage.getItem("photoUrl");
   //fetching api data
   useEffect(() => {
+    handleGetApi();
+  }, []);
+  const handleGetApi = () => {
     axios.get(`https://jsonplaceholder.typicode.com/users`).then((data) => {
       setUserData(data.data);
     });
-  }, []);
-  //handle edit Data
-  const [updateData, setUpdateData] = useState([]);
- const [firstName, setFirstName] = useState();
- const [lastName, setLastName] = useState();
- const [email, setEmail] = useState();
-//   const handleEditChange = (event) => {
-//    const {name,value} = event.target;
-//   setPutData({...putData, [name]: value});
-//   };
-  const handleEdit = (id) => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${id}`, {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-      })
-      .then((data) => {
-        setUpdateData(data.data);
-      });
+  };
+  const [userPutData, setUsePutData] = useState({
+    fName: "",
+    lName: "",
+    email: "",
+  });
+  console.log("----------", userPutData)
+  const selectUserData = (id) => {
+    setUsePutData(userData[id - 1]);
+  };
+  const handleUpdateChange = (event) => {
+    let { name, value } = event.target;
+    setUsePutData((prevValue) => {
+      return {
+        ...prevValue,
+        [name]: value,
+      };
+    });
+  };
+  const updateUserDataByClick = () => {
+    axios.put(
+      `https://jsonplaceholder.typicode.com/users/${userPutData.id}`,
+      userPutData
+    );
+    setUsePutData({
+      fName: "",
+      lName: "",
+      email: "",
+    });
+    handleGetApi();
+  };
+  //remove user
+  const removeUser = (id) => {
+    axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    handleGetApi();
   };
   return (
     <div className="table-data">
@@ -92,14 +110,19 @@ const UserTable = () => {
                           data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop"
                           onClick={() => {
-                            handleEdit(user.id);
+                            selectUserData(user.id);
                           }}
                         >
                           <i class="fa-solid fa-pen"></i>
                         </MDBBtn>
                       </td>
                       <td style={{ color: "red" }}>
-                        <MDBBtn color="danger">
+                        <MDBBtn
+                          color="danger"
+                          onClick={() => {
+                            removeUser(user.id);
+                          }}
+                        >
                           <i class="fa-solid fa-trash"></i>
                         </MDBBtn>
                       </td>
@@ -136,20 +159,18 @@ const UserTable = () => {
               <div className="modal-body">
                 <MDBInput
                   name="firstname"
-                  value={updateData.name}
-                  onChange={(e) =>setFirstName(e.target.value)}
+                  value={userPutData.fName}
+                  onChange={handleUpdateChange}
                 />
                 <MDBInput
                   name="lastname"
-                  value={updateData.username}
-                  onChange={(e) =>setLastName(e.target.value)}
-                
+                  value={userPutData.lName}
+                  onChange={handleUpdateChange}
                 />
                 <MDBInput
                   name="email"
-                  value={updateData.email}
-                  onChange={(e) =>setEmail(e.target.value)}
-
+                  value={userPutData.email}
+                  onChange={handleUpdateChange}
                 />
                 {/* <MDBInput name="address" value={updateData.address.street}/> */}
               </div>
@@ -161,7 +182,11 @@ const UserTable = () => {
                 >
                   Close
                 </button>
-                <button type="button" className="btn btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={updateUserDataByClick}
+                >
                   Save Changes
                 </button>
               </div>
