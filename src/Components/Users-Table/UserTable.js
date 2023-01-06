@@ -12,10 +12,8 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 const UserTable = () => {
+  //Read api data
   const [userData, setUserData] = useState([]);
-  //get value from local storage
-  const imageUrl = localStorage.getItem("photoUrl");
-  //fetching api data
   useEffect(() => {
     handleGetApi();
   }, []);
@@ -24,13 +22,15 @@ const UserTable = () => {
       setUserData(data.data);
     });
   };
+
+  //Update Api Data
   const [userPutData, setUsePutData] = useState({
-    fName: "",
-    lName: "",
+    name: "",
+    username: "",
     email: "",
   });
-  console.log("----------", userPutData)
-  const selectUserData = (id) => {
+  console.log("update api data", userPutData);
+  const handleSelectUserData = (id) => {
     setUsePutData(userData[id - 1]);
   };
   const handleUpdateChange = (event) => {
@@ -43,27 +43,25 @@ const UserTable = () => {
     });
   };
   const updateUserDataByClick = () => {
-    axios.put(
-      `https://jsonplaceholder.typicode.com/users/${userPutData.id}`,
-      userPutData
-    );
-    setUsePutData({
-      fName: "",
-      lName: "",
-      email: "",
+    axios.put(`https://jsonplaceholder.typicode.com/users/${userPutData.id}`, {
+      name: userPutData.name,
+      username: userPutData.username,
+      email: userPutData.email,
     });
-    handleGetApi();
+    // handleGetApi();
   };
   //remove user
   const removeUser = (id) => {
-    axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`).then(res=>{
+      console.log(res)
+    });
     handleGetApi();
   };
   return (
     <div className="table-data">
       <MDBContainer className="mt-5">
         <MDBRow>
-          <MDBCol>
+          <MDBCol lg="10">
             <form className="d-flex input-group w-auto">
               <input
                 type="search"
@@ -93,12 +91,11 @@ const UserTable = () => {
                       <td>{user.username}</td>
                       <td>
                         <img
-                          src={imageUrl}
+                          src="https://www.freeiconspng.com/uploads/free-apple-icon-png-13.png"
                           alt="error"
                           style={{
                             height: "80px",
                             width: "100px",
-                            border: "0.1px solid lightgreen",
                           }}
                         />
                       </td>
@@ -110,7 +107,7 @@ const UserTable = () => {
                           data-bs-toggle="modal"
                           data-bs-target="#staticBackdrop"
                           onClick={() => {
-                            selectUserData(user.id);
+                            handleSelectUserData(user.id);
                           }}
                         >
                           <i class="fa-solid fa-pen"></i>
@@ -158,13 +155,13 @@ const UserTable = () => {
               </div>
               <div className="modal-body">
                 <MDBInput
-                  name="firstname"
-                  value={userPutData.fName}
+                  name="name"
+                  value={userPutData.name}
                   onChange={handleUpdateChange}
                 />
                 <MDBInput
-                  name="lastname"
-                  value={userPutData.lName}
+                  name="username"
+                  value={userPutData.username}
                   onChange={handleUpdateChange}
                 />
                 <MDBInput
