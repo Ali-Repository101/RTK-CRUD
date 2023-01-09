@@ -91,7 +91,7 @@ const UserTable = () => {
                       <td>{user.username}</td>
                       <td>
                         <img
-                          src="https://www.freeiconspng.com/uploads/free-apple-icon-png-13.png"
+                          src="https://www.freeiconspng.com/uploads/free-apple-icon-png-13.pn"
                           alt="error"
                           style={{
                             height: "80px",
